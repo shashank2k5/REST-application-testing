@@ -1,11 +1,13 @@
+
 package com.example.student_management.service;
 
+import com.example.student_management.dto.StudentRequestDTO;
+import com.example.student_management.dto.StudentResponseDTO;
+import com.example.student_management.exception.StudentNotFoundException;
 import com.example.student_management.model.Student;
 import com.example.student_management.repository.StudentRepository;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -18,48 +20,95 @@ public class StudentService {
         this.repository = repository;
     }
 
-    // Add student
-    public Student addStudent(Student student) {
-        return repository.save(student);
+    // Convert Entity to Response DTO
+    private StudentResponseDTO convertToDTO(Student student) {
+
+        return new StudentResponseDTO(
+                student.getId(),
+                student.getName(),
+                student.getEmail(),
+                student.getDepartment(),
+                student.getAge()
+        );
     }
 
-    // Get all students
-    public List<Student> getAllStudents() {
-        return repository.findAll();
+    // Add Student
+    public StudentResponseDTO addStudent(StudentRequestDTO dto) {
+
+        Student student = new Student();
+
+        student.setName(dto.getName());
+        student.setEmail(dto.getEmail());
+        student.setDepartment(dto.getDepartment());
+        student.setAge(dto.getAge());
+
+        Student savedStudent = repository.save(student);
+
+        return convertToDTO(savedStudent);
     }
 
-    // Get student by ID
-    public Student getStudentById(Long id) {
-        return repository.findById(id)
+    // Get All Students
+    public List<StudentResponseDTO> getAllStudents() {
+
+        return repository.findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
+    // Get Student By ID
+    public StudentResponseDTO getStudentById(Long id) {
+
+        Student student = repository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "Student not found"
+                        new StudentNotFoundException(
+                                "Student with ID " + id + " not found"
                         )
                 );
+
+        return convertToDTO(student);
     }
 
-    // Update student
-    public Student updateStudent(Long id, Student updatedStudent) {
+    // Update Student
+    public StudentResponseDTO updateStudent(
+            Long id, StudentRequestDTO dto) {
 
-        Student student = getStudentById(id);
+        Student student = repository.findById(id)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student with ID " + id + " not found"
+                        )
+                );
 
-        student.setName(updatedStudent.getName());
-        student.setEmail(updatedStudent.getEmail());
-        student.setDepartment(updatedStudent.getDepartment());
-        student.setAge(updatedStudent.getAge());
+        student.setName(dto.getName());
+        student.setEmail(dto.getEmail());
+        student.setDepartment(dto.getDepartment());
+        student.setAge(dto.getAge());
 
-        return repository.save(student);
+        Student updatedStudent = repository.save(student);
+
+        return convertToDTO(updatedStudent);
     }
 
-    // Delete student
+    // Delete Student
     public void deleteStudent(Long id) {
-        Student student = getStudentById(id);
+
+        Student student = repository.findById(id)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student with ID " + id + " not found"
+                        )
+                );
+
         repository.delete(student);
     }
 
-    // Search student by name
-    public List<Student> searchStudents(String name) {
-        return repository.findByNameContainingIgnoreCase(name);
+    // Search Student
+    public List<StudentResponseDTO> searchStudents(String name) {
+
+        return repository.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 }

@@ -1,6 +1,8 @@
+
 package com.example.student_management.controller;
 
-import com.example.student_management.model.Student;
+import com.example.student_management.dto.StudentRequestDTO;
+import com.example.student_management.dto.StudentResponseDTO;
 import com.example.student_management.service.StudentService;
 
 import jakarta.validation.Valid;
@@ -23,33 +25,35 @@ public class StudentController {
 
     // CREATE
     @PostMapping
-    public ResponseEntity<Student> addStudent(
-            @Valid @RequestBody Student student) {
+    public ResponseEntity<StudentResponseDTO> addStudent(
+            @Valid @RequestBody StudentRequestDTO dto) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(service.addStudent(student));
+                .body(service.addStudent(dto));
     }
 
     // READ ALL
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<StudentResponseDTO> getAllStudents() {
         return service.getAllStudents();
     }
 
     // READ BY ID
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Long id) {
+    public StudentResponseDTO getStudentById(
+            @PathVariable Long id) {
+
         return service.getStudentById(id);
     }
 
     // UPDATE
     @PutMapping("/{id}")
-    public Student updateStudent(
+    public StudentResponseDTO updateStudent(
             @PathVariable Long id,
-            @Valid @RequestBody Student student) {
+            @Valid @RequestBody StudentRequestDTO dto) {
 
-        return service.updateStudent(id, student);
+        return service.updateStudent(id, dto);
     }
 
     // DELETE
@@ -58,12 +62,13 @@ public class StudentController {
             @PathVariable Long id) {
 
         service.deleteStudent(id);
+
         return ResponseEntity.noContent().build();
     }
 
     // SEARCH
     @GetMapping("/search")
-    public List<Student> searchStudents(
+    public List<StudentResponseDTO> searchStudents(
             @RequestParam String name) {
 
         return service.searchStudents(name);
