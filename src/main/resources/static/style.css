@@ -1,0 +1,186 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fa;
+    margin: 0;
+    padding: 30px;
+}
+
+.container {
+    max-width: 750px;
+    margin: 30px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    color: #1f4e79;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #333;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+/* Form */
+
+#studentForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #2563eb;
+}
+
+/* General buttons */
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+/* Form buttons */
+
+#submitBtn,
+#cancelBtn {
+    width: 100%;
+    padding: 12px;
+}
+
+#submitBtn {
+    background: #1f4e79;
+}
+
+#submitBtn:hover {
+    background: #163a5c;
+}
+
+#cancelBtn {
+    background: #64748b;
+}
+
+#cancelBtn:hover {
+    background: #475569;
+}
+
+#cancelBtn[hidden] {
+    display: none;
+}
+
+/* Student list */
+
+#studentList {
+    padding: 0;
+    margin: 0;
+}
+
+#studentList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #e5e7eb;
+    list-style: none;
+}
+
+.student-details {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    line-height: 1.6;
+}
+
+/* Small action buttons */
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.action-buttons button {
+    width: auto;
+    padding: 7px 13px;
+    font-size: 12px;
+}
+
+/* Edit */
+
+.edit-btn {
+    background: #2563eb;
+}
+
+.edit-btn:hover {
+    background: #1d4ed8;
+}
+
+/* Delete */
+
+.delete-btn {
+    background: #dc3545;
+}
+
+.delete-btn:hover {
+    background: #b91c1c;
+}
+
+/* Messages */
+
+#message {
+    font-weight: bold;
+    margin-top: 18px;
+    color: #2563eb;
+}
+
+/* Mobile responsive */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        margin: 10px auto;
+        padding: 18px;
+    }
+
+    #studentList li {
+        align-items: flex-start;
+    }
+
+    .action-buttons {
+        gap: 5px;
+    }
+
+    .action-buttons button {
+        padding: 7px 9px;
+        font-size: 11px;
+    }
+}
